@@ -1,0 +1,9 @@
+---
+# tasks file for strongswan-svr
+
+- name: Install StrongSwan apt packages
+  become: true
+  apt:
+    update_cache: true
+    name: [ strongswan, strongswan-pki, strongswan-plugin-dhcp, strongswan-plugin-farp ]
+    state: present
