@@ -5,5 +5,5 @@
   become: true
   apt:
     update_cache: true
-    name: [ strongswan, strongswan-pki, strongswan-plugin-dhcp, strongswan-plugin-farp ]
+    name: [ strongswan, strongswan-swanctl, strongswan-pki, libstrongswan-standard-plugins, libstrongswan-extra-plugins, libcharon-standard-plugins, libcharon-extra-plugins ]
     state: present
