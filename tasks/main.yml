@@ -39,4 +39,6 @@
   with_items:
   - { pattern: '/etc/letsencrypt/live/{{ vpn.hostname }}/*', line: '  /etc/letsencrypt/live/{{ vpn.hostname }}/*     r,' }
   - { pattern: '/etc/letsencrypt/archive/{{ vpn.hostname }}/*', line: '  /etc/letsencrypt/archive/{{ vpn.hostname }}/*     r,' }
-  notify: restart strongswan
+  notify:
+  - restart apparmor
+  - restart strongswan

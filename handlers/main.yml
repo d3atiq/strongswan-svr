@@ -12,3 +12,9 @@
   service:
     name: strongswan
     state: restarted
+
+- name: restart apparmor
+  become: true
+  service:
+    name: apparmor
+    state: restarted
