@@ -7,3 +7,36 @@
     update_cache: true
     name: [ strongswan, strongswan-swanctl, strongswan-pki, libstrongswan-standard-plugins, libstrongswan-extra-plugins, libcharon-standard-plugins, libcharon-extra-plugins ]
     state: present
+
+- name: Create ipsec configuration
+  become: true
+  template:
+    src: ipsec.conf.j2
+    dest: /etc/ipsec.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart strongswan
+
+- name: Create ipsec secrets
+  become: true
+  template:
+    src: ipsec.secrets.j2
+    dest: /etc/ipsec.secrets
+    owner: root
+    group: root
+    mode: 0400
+  notify: restart strongswan
+
+- name: Grant access to certificate and key files in Apparmor
+  become: true
+  lineinfile:
+    path: /etc/apparmor.d/local/usr.lib.ipsec.charon
+    regexp: "{{ item.pattern }}"
+    line: "{{ item.line }}"
+    state: present
+    backup: true
+  with_items:
+  - { pattern: '/etc/letsencrypt/live/{{ vpn.hostname }}/*', line: '  /etc/letsencrypt/live/{{ vpn.hostname }}/*     r,' }
+  - { pattern: '/etc/letsencrypt/archive/{{ vpn.hostname }}/*', line: '  /etc/letsencrypt/archive/{{ vpn.hostname }}/*     r,' }
+  notify: restart strongswan

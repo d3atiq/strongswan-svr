@@ -1,2 +1,14 @@
 ---
 # handlers file for strongswan-svr
+
+- name: start strongswan
+  become: true
+  service:
+    name: strongswan
+    state: started
+
+- name: restart strongswan
+  become: true
+  service:
+    name: strongswan
+    state: restarted

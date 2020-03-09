@@ -1,28 +1,25 @@
-etup
-  strictcrlpolicy=yes
-  uniqueids=never
-conn roadwarrior
-  auto=add
-  compress=no
-  type=tunnel
-  keyexchange=ikev2
-  fragmentation=yes
-  forceencaps=yes
-  ike=aes256gcm16-prfsha384-ecp521,aes256gcm16-prfsha384-ecp384!
-  esp=aes256gcm16-ecp521,aes256gcm16-ecp384!
-  dpdaction=clear
-  dpddelay=900s
-  rekey=no
-  left=%any
-  leftid=@${VPNHOST}
-  leftcert=cert.pem
-  leftsendcert=always
-  leftsubnet=0.0.0.0/0
-  right=%any
-  rightid=%any
-  rightauth=eap-mschapv2
-  eap_identity=%any
-  rightdns=${VPNDNS}
-  rightsourceip=%dhcp
-  rightsendcert=never
+config setup
+        uniqueids=never
 
+conn roadwarrior
+        auto=add
+        compress=no
+        type=tunnel
+        keyexchange=ikev2
+        fragmentation=yes
+        forceencaps=yes
+        dpdaction=clear
+        dpddelay=300s
+        rekey=no
+        left=%any
+        leftid=@{{ vpn.hostname }}
+        leftcert=/etc/letsencrypt/live/{{ vpn.hostname }}/fullchain.pem
+        leftsendcert=always
+        leftsubnet=0.0.0.0/0
+        right=%any
+        rightid=%any
+        rightauth=eap-mschapv2
+        rightsourceip=%dhcp
+        rightdns={{ vpn.dns }}
+        rightsendcert=never
+        eap_identity=%identity
