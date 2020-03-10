@@ -57,3 +57,9 @@
   - { pattern: 'interface={{ vpn.dhcp.interface }}', line: '    interface={{ vpn.dhcp.interface  }}' }
   - { pattern: 'server={{ vpn.dhcp.broadcast }}', line: '    server={{ vpn.dhcp.broadcast }}' }
   when: vpn.dhcp is defined and vpn.dhcp.interface is defined and vpn.dhcp.broadcast is defined
+
+- name: Restart StrongSwan
+  become: true
+  service:
+    name: strongswan
+    state: restarted
