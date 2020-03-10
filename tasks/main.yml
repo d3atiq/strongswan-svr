@@ -42,3 +42,18 @@
   notify:
   - restart apparmor
   - restart strongswan
+
+- name: Setup DHCP from given interface
+  become: true
+  lineinfile:
+    path: /etc/strongswan.d/charon/dhcp.conf
+    regexp: "{{ item.pattern }}"
+    line: "{{ item.line }}"
+    state: present
+    backup: true
+  with_items:
+  - { pattern: 'force_server_address=yes', line: '    force_server_address=yes' }
+  - { pattern: 'identity_lease=no', line: '    identity_lease=no' }
+  - { pattern: 'interface={{ vpn.dhcp.interface }}', line: '    interface={{ vpn.dhcp.interface  }}' }
+  - { pattern: 'server={{ vpn.dhcp.broadcast }}', line: '    server={{ vpn.dhcp.broadcast }}' }
+  when: vpn.dhcp is defined and vpn.dhcp.interface is defined and vpn.dhcp.broadcast is defined
